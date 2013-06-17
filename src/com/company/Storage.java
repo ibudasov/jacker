@@ -1,4 +1,5 @@
 ﻿package com.company;
+import java.io.*;
 
 public class Storage {
 	 
@@ -11,61 +12,67 @@ public class Storage {
  
     
     public Storage() {
-        // конструктор
-    	
 		this.tasks = new String[100][];
 		
-		this.tasks[0] = new String[]{"Название задачи", "2013-10-10 11:12:13", "2013-10-10 11:12:14"};
+		//this.tasks[0] = new String[]{"Название задачи", "2013-10-10 11:12:13", "2013-10-10 11:12:14"};
     }
     
+    
+    /**
+     * Добавление задачи
+     */
  
-    public String[] add(String[] task) {
-        // добавление таска
-    	
-    	String[][] data = getTasks();
-    	
-    	for(int i = 0; i < data.length; i++)
-    	{
-    		if(data[i] == null)
-    		{
-    			data[i] = task;
-    			
-    			break;
-    		}
-    	}
-    	
-    	store(data);
-    	
-    	return  task;
-    }
-    
+	public String[] add(String[] task) {
+		
+		String[][] data = getTasks();
+		
+		for(int i = 0; i < data.length; i++)
+		{
+			if(data[i] == null)
+			{
+				data[i] = task;
+				
+				break;
+			}
+		}
+		
+		store(data);
+		
+		return  task;
+	}
  
-    public String[] get(Integer id) {
-        // вохвращает задачу по айдишнику
-    	
-    	String[][] data = getTasks();
-    	
-        return  data[id];
-    }
+    /**
+     * воpвращает задачу по айдишнику
+     */
+	public String[] get(Integer id) {
+	
+		String[][] data = getTasks();
+		
+	    return  data[id];
+	}
     
+    /**
+     * воpвращает id задачи по имени,
+     * если нет задачи с заданным именем -1
+     */
+	public int getIdByName(String name) {
+		
+		String[][] data = getTasks();
+		
+		for(int i = 0; i < data.length; i++)
+		{
+			if(data[i][0] == name)
+				return i;
+		}
+		
+		return -1;
+	}
     
-    public int getIdByName(String name) {
-        // вохвращает id задачи по имени
-    	String[][] data = getTasks();
-    	
-    	for(int i = 0; i < data.length; i++)
-    	{
-    		if(data[i][0] == name)
-    			return i;
-    	}
-    	
-        return -1;
-    }
-    
- 
+    /**
+     *  удаление задачи по id
+     */
     public boolean delete(Integer id) {
-        // удаление таска по айдишнику
-    	
+        
     	String[][] data = getTasks();
     	
     	tasks[id] = new String[]{};
@@ -75,28 +82,64 @@ public class Storage {
         return true;
     }
     
- 
+    /**
+     *  удаление всех задач
+     */
     public boolean truncate() {
-        // удаление всех задач
     	
     	store(new String[100][]);
-    	
+      	
         return true;
     }
     
     
+    /**
+     *  загрузка данных
+     */
     private String[][] getTasks() {
-    	//получение данных
-    	
+
+    	try{
+			FileInputStream fis = new FileInputStream("storage.dat");
+			
+			ObjectInputStream iis = new ObjectInputStream(fis);
+			
+			tasks = (String[][])iis.readObject();
+			
+			fis.close();
+			
+			iis.close();
+			
+		}catch(Exception e) {
+		
+		}
+			
     	return tasks;
     }
     
-	
+    /**
+     *  сохранение данных
+     */
 	public void store(String[][] data) {
-		//сохранение данных
+		
+		try{
+			
+			FileOutputStream fos = new FileOutputStream("storage.dat");
+			
+			ObjectOutputStream oos = new ObjectOutputStream(fos);
+			
+			oos.writeObject(data);
+			
+			fos.close();
+			
+			oos.close();
+			
+		}catch (Exception e){
+		
+		}
 		
 		data = this.tasks;
     }
 }
+
 
 
