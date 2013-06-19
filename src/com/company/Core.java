@@ -8,8 +8,8 @@
  *
  * @version 0.1
  * @package standard
- * @author Igor Budasov <igor.budasov@gmail.com>
- * @copyright Copyright (c) 2013, Igor Budasov
+ * @author Taras Narizhniy <maximnow@gmail.com>
+ * @copyright Copyright (c) 2013, Taras Narizhniy
  */
 
 package com.company;
@@ -29,7 +29,8 @@ public class Core {
 
     public void Core() {
 
-        TimeZone.setDefault(TimeZone.getTimeZone("GMT+0"));
+        TimeZone.setDefault(TimeZone.getTimeZone("GMT+0")); /** это нужно чтобы SimpleDateFormat не добавлял +2 часа нашей таймзоны */
+
         // приветствуем юзернейма
         res.setAndSend("Введите 'start' для начала новой задачи, или 'finish' для окончания текущей.");
         //@todo: получать из хранилища незавершенную задачу, если возможно
@@ -46,52 +47,46 @@ public class Core {
 
         if (input.equalsIgnoreCase("finish")) {
             //@todo: получаем открытую задачу
-            //@todo: считаем время
 
             /**
-             * определяем текущее время
-             */
-            GregorianCalendar startTime = new GregorianCalendar();
-            System.out.println("Start time: " + startTime.get(Calendar.HOUR_OF_DAY) + ":" + startTime.get(Calendar.MINUTE) + ":" + startTime.get(Calendar.SECOND));
-
-            /**
-             * добавляем час к текущему времени
-             */
-            GregorianCalendar endTime = new GregorianCalendar();
-            endTime.add(Calendar.HOUR_OF_DAY, 1);
-            System.out.println("End time: " + endTime.get(Calendar.HOUR_OF_DAY) + ":" + endTime.get(Calendar.MINUTE) + ":" + endTime.get(Calendar.SECOND));
-
-            /**
-             * определяем текущее время с помощью класса Date
+             * Определяем текущее время с помощью класса GregorianCalendar
              * и форматируем его исключительно для вывода в консоль
              */
-            Date starttime = new Date();
-            SimpleDateFormat startTimeFormat = new SimpleDateFormat("d.MM HH:mm:ss");
-            System.out.println("Текущее время: " + startTimeFormat.format(starttime)); /** проверка */
+            GregorianCalendar openTime = new GregorianCalendar();
 
-            /**
-             * используем переменную endTime, полученную через применение
-             * класса GregorianCalendar и присваиваем её значение
-             * переменной класса Date
-             * форматируем так же с помощью SimpleDateFormat
-             */
-            Date pastTime = endTime.getTime();
-            SimpleDateFormat endTimeFormat = new SimpleDateFormat("d.MM HH:mm:ss");
-            System.out.println("Прошедшее время: " + endTimeFormat.format(pastTime));
+            /** Добавляем час к текущему времени */
+            GregorianCalendar closeTime = new GregorianCalendar();
+            closeTime.add(Calendar.HOUR_OF_DAY, 1);
 
-            /**
-             * вычисляем прошедшее время, отнимая starttime от pastTime
-             */
-            long resultTime = (pastTime.getTime() - starttime.getTime()); /** разница в милисекундах уже посчитана, теперь её нужно запихнуть в объект Date */
-            SimpleDateFormat resultTimeFormat = new SimpleDateFormat("yyyy d.MM HH:mm:ss");
-            //resultTimeFormat.setTimeZone(TimeZone.getTimeZone("GMT+0"));
-            System.out.println("Значение resultTime: " + resultTime + " - " + resultTimeFormat.format(resultTime));
-            Date finalResult = new Date(resultTime); /** поправка на часовой пояс (у нас он +2) */
-            SimpleDateFormat finalTimeFormat = new SimpleDateFormat("HH:mm"); /** форматируем вывод времени */
-            res.setAndSend("Отработано " + finalTimeFormat.format(finalResult));
+            /** Возращаем посчитаный интервал времени */
+            res.setAndSend("Время работы: " + Interval(openTime, closeTime));
             return;
         }
 
         return;
+    }
+
+    public String Interval(GregorianCalendar startTime, GregorianCalendar finishTime) {
+
+        /**
+         * Присваиваем значение переменных GregorianCalendar
+         * переменным класса Date форматируем так же с помощью SimpleDateFormat в методе formatTime
+         */
+        Date beginTime = startTime.getTime();
+        Date endTime = finishTime.getTime();
+
+        /** Вычисляем прошедшее время, отнимая beginTime от endTime */
+        long interval = (endTime.getTime() - beginTime.getTime()); /** считается разница в милисекундах */
+        Date resultTime = new Date(interval);
+        return formatTime(resultTime);
+    }
+
+    /**
+     * Метод который форматирует миллисекунды в часы, минуты и т.д.
+     */
+    public String formatTime(Date timeToFormat) {
+        SimpleDateFormat timeFormat = new SimpleDateFormat("HH:mm");
+        return timeFormat.format(timeToFormat);
+
     }
 }
