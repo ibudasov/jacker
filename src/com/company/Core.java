@@ -39,6 +39,9 @@ public class Core {
         if (input.equalsIgnoreCase("finish")) {
             //@todo: получаем открытую задачу
             //@todo: считаем время
+
+            /** тут уже должен быть мой код! */
+
             res.setAndSend("Отработано " + 12 + " минут");
             return;
         }
