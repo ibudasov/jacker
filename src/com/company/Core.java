@@ -38,6 +38,7 @@ public class Core {
 
         // получаем команду
         String input = req.get();
+        //@todo: анализировать строку вида "команда имя_задачи"
 
         if (input.equalsIgnoreCase("start")) {
             //@todo: получать не только команду старта, а еще и парсить как-то и имя
