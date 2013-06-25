@@ -14,6 +14,7 @@
 
 package com.company;
 
+import javax.swing.*;
 import java.text.SimpleDateFormat;
 import java.util.Calendar;
 import java.util.Date;
@@ -36,17 +37,27 @@ public class Core {
         //@todo: получать из хранилища незавершенную задачу, если возможно
         //@todo: показывать ее юзернейму, если возможно, типа: сейчас есть незавершенная задача
 
-        // получаем команду
-        String input = req.get();
-        //@todo: анализировать строку вида "команда имя_задачи"
+        /** получаем команду Start или Finish */
+        //String inputCommand = JOptionPane.showInputDialog
+        //        ("Start or Finish?");
 
-        if (input.equalsIgnoreCase("start")) {
+        res.setAndSend("Значение inputCommand: " + inputCommand); /** проверка состояния переменной inputCommand*/
+
+        //Storage st = new Storage();
+
+        //st.add(new String[] {"Название задачи", "2013-10-10 11:12:13", "2013-10-10 11:12:14"});
+        //int id = st.getIdByName("Название задачи" );
+        //String[] task = st.get(id);
+
+        if (inputCommand.equalsIgnoreCase("start")) {
             //@todo: получать не только команду старта, а еще и парсить как-то и имя
+            String inputTask = JOptionPane.showInputDialog
+                 ("Что делаем?");
             //@todo: сохранение стартовавшей задачи
-            res.setAndSend("Окей, начали. Для завершения -- 'finish'");
+            res.setAndSend("Окей, начали: '" + inputTask + "'. Для завершения -- 'finish'");
         }
 
-        if (input.equalsIgnoreCase("finish")) {
+        if (inputCommand.equalsIgnoreCase("finish")) {
             //@todo: получаем открытую задачу
 
             /**
