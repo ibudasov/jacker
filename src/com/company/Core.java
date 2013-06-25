@@ -43,7 +43,9 @@ public class Core {
 
         res.setAndSend("Значение inputCommand: " + inputCommand); /** проверка состояния переменной inputCommand*/
 
-        //Storage st = new Storage();
+        Storage st = new Storage();
+        Storage st = new Storage();
+
 
         //st.add(new String[] {"Название задачи", "2013-10-10 11:12:13", "2013-10-10 11:12:14"});
         //int id = st.getIdByName("Название задачи" );

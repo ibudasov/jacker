@@ -14,6 +14,7 @@ import java.util.Scanner;
 
 public class Request {
 
+
     private String result;
 
     /**
@@ -33,6 +34,7 @@ public class Request {
         this.set(in.next());
         return this.result;
     }
+    //@todo: анализировать строку вида "команда имя_задачи"
 
     /**
      * Устанавливаем объект запроса.
