@@ -14,12 +14,11 @@
 
 package com.company;
 
+import org.apache.xmlbeans.impl.xb.xsdschema.Public;
+
 import javax.swing.*;
 import java.text.SimpleDateFormat;
-import java.util.Calendar;
-import java.util.Date;
-import java.util.GregorianCalendar;
-import java.util.TimeZone;
+import java.util.*;
 
 
 public class Core {
@@ -50,23 +49,24 @@ public class Core {
             //@todo: получать не только команду старта, а еще и парсить как-то и имя
             //String inputTask = JOptionPane.showInputDialog   //получаем имя задачи с помощью окна
             //     ("Что делаем?");
-            Date openTime = new Date();
-            String opTime = formatTime(openTime);
-            //String opTime = openTime.toString();
-            res.setAndSend("Значение opTime: " + opTime); /** проверка состояния переменной opTime*/
-            ///String[] task = new String[]{inputCommand, opTime};
-            String inputTask = req.get("Что делаем?");
-            //@todo: сохранение стартовавшей задачи
+            Date openTime = new Date(); /** определяем время начала задачи */
+            String startTime = formatTime(openTime); /** форматируем время начала задачи */
+            //res.setAndSend("Значение startTime: " + startTime); /** проверяем состояние переменной startTime*/
+            String inputTask = req.get("Что делаем?"); /** берём название задачи */
             res.setAndSend("Окей, начали: '" + inputTask + "'. Для завершения -- 'finish'");
-            ///st.add(task);
-            ///int id = st.getIdByName(inputCommand);
-            ///String[] taskFromFile = st.get(id);
-            ///res.setAndSend("Задача из файла: " + taskFromFile);
+            /** сохранение стартовавшей задачи */
+            String[] task = new String[]{inputTask, startTime};
+            st.add(task);
+            //System.out.println(Arrays.toString(st.add(task)));   проверка правильного выполнение двух строк выше
+
 
         }
 
         if (inputCommand.equalsIgnoreCase("finish")) {
             //@todo: получаем открытую задачу
+            int id = st.getIdByName(inputTask);
+            String[] taskFromFile = st.get(id);
+            res.setAndSend("Задача из файла: " + Arrays.toString(taskFromFile));
 
             /**
              * Определяем текущее время с помощью класса GregorianCalendar
@@ -106,7 +106,9 @@ public class Core {
      */
     public String formatTime(Date timeToFormat) {
         SimpleDateFormat timeFormat = new SimpleDateFormat("HH:mm");
-        return timeFormat.format(timeToFormat);
+        String result = timeFormat.format(timeToFormat);
+        return result;
+
 
     }
 }
