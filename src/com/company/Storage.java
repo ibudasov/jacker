@@ -64,7 +64,7 @@ public class Storage {
         String[][] data = getTasks();
 
         for (int i = 0; i < data.length; i++) {
-            if (data[i][0] == name)
+            if (data[i][0].equals(name))
                 return i;
         }
 

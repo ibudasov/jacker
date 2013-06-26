@@ -30,22 +30,17 @@ public class Core {
 
     public void Core() {
 
-        TimeZone.setDefault(TimeZone.getTimeZone("GMT+0")); /** это нужно чтобы SimpleDateFormat не добавлял +2 часа нашей таймзоны */
+        //TimeZone.setDefault(TimeZone.getTimeZone("GMT+0")); /** это нужно чтобы SimpleDateFormat не добавлял +2 часа нашей таймзоны */
 
-        // приветствуем юзернейма
-        res.setAndSend("Введите 'start' для начала новой задачи, или 'finish' для окончания текущей.");
         //@todo: получать из хранилища незавершенную задачу, если возможно
         //@todo: показывать ее юзернейму, если возможно, типа: сейчас есть незавершенная задача
 
-        /** получаем команду Start или Finish */
-        //String inputCommand = JOptionPane.showInputDialog
+        // приветствуем юзернейма
+        // получаем команду Start или Finish
+        //String inputCommand = JOptionPane.showInputDialog  //получаем команду с помощью окна
         //        ("Start or Finish?");
-
+        String inputCommand = req.get("Введите 'start' для начала новой задачи, или 'finish' для окончания текущей.");
         res.setAndSend("Значение inputCommand: " + inputCommand); /** проверка состояния переменной inputCommand*/
-
-        Storage st = new Storage();
-        Storage st = new Storage();
-
 
         //st.add(new String[] {"Название задачи", "2013-10-10 11:12:13", "2013-10-10 11:12:14"});
         //int id = st.getIdByName("Название задачи" );
@@ -53,10 +48,21 @@ public class Core {
 
         if (inputCommand.equalsIgnoreCase("start")) {
             //@todo: получать не только команду старта, а еще и парсить как-то и имя
-            String inputTask = JOptionPane.showInputDialog
-                 ("Что делаем?");
+            //String inputTask = JOptionPane.showInputDialog   //получаем имя задачи с помощью окна
+            //     ("Что делаем?");
+            Date openTime = new Date();
+            String opTime = formatTime(openTime);
+            //String opTime = openTime.toString();
+            res.setAndSend("Значение opTime: " + opTime); /** проверка состояния переменной opTime*/
+            ///String[] task = new String[]{inputCommand, opTime};
+            String inputTask = req.get("Что делаем?");
             //@todo: сохранение стартовавшей задачи
             res.setAndSend("Окей, начали: '" + inputTask + "'. Для завершения -- 'finish'");
+            ///st.add(task);
+            ///int id = st.getIdByName(inputCommand);
+            ///String[] taskFromFile = st.get(id);
+            ///res.setAndSend("Задача из файла: " + taskFromFile);
+
         }
 
         if (inputCommand.equalsIgnoreCase("finish")) {
@@ -66,14 +72,14 @@ public class Core {
              * Определяем текущее время с помощью класса GregorianCalendar
              * и форматируем его исключительно для вывода в консоль
              */
-            GregorianCalendar openTime = new GregorianCalendar();
+            //openTime = new GregorianCalendar();  - openTime получаем из открытой задачи
 
             /** Добавляем час к текущему времени */
             GregorianCalendar closeTime = new GregorianCalendar();
             closeTime.add(Calendar.HOUR_OF_DAY, 1);
 
             /** Возращаем посчитаный интервал времени */
-            res.setAndSend("Время работы: " + Interval(openTime, closeTime));
+            //res.setAndSend("Время работы: " + Interval(openTime, closeTime));
             return;
         }
 

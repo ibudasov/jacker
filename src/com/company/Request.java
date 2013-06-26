@@ -5,6 +5,8 @@
  * @version 0.1
  * @package standard
  * @author Igor Budasov <igor.budasov@gmail.com>
+ * @author Taras Narizhniy <maximnow@gmail.com>
+ * @copyright Copyright (c) 2013, Taras Narizhniy
  * @copyright Copyright (c) 2013, Igor Budasov
  */
 
@@ -29,7 +31,8 @@ public class Request {
      *
      * @return String
      */
-    public String get() {
+    public String get(String request) {
+        System.out.println(request);
         Scanner in = new Scanner(System.in);
         this.set(in.next());
         return this.result;
