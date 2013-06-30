@@ -51,7 +51,7 @@ public class Storage {
     public String[] get(Integer id) {
 
         String[][] data = getTasks();
-
+        System.out.println(data[0][0]);
         return data[id];
     }
 
@@ -63,10 +63,14 @@ public class Storage {
 
         String[][] data = getTasks();
 
-        for (int i = 0; i < data.length; i++) {
-            if (data[i][0].equals(name))
-                return i;
-        }
+        for (int i = 0; i < data.length; i++)
+
+            if (data[i] != null) {
+
+                if (data[i][0].equals(name)) {
+                    return i;
+                }
+            }
 
         return -1;
     }
@@ -99,7 +103,7 @@ public class Storage {
     /**
      * Загрузка данных
      */
-    private String[][] getTasks() {
+    public String[][] getTasks() {
 
         try {
             FileInputStream fis = new FileInputStream("storage.dat");
@@ -141,5 +145,17 @@ public class Storage {
         }
 
         data = this.tasks;
+    }
+
+
+    public String taskToString(String[] task) {
+
+        String result = new String();
+
+        for (int i = 0; i < task.length; i++) {
+            result = task[i] + " ";
+        }
+
+        return result;
     }
 }

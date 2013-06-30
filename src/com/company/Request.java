@@ -34,7 +34,7 @@ public class Request {
     public String get(String request) {
         System.out.println(request);
         Scanner in = new Scanner(System.in);
-        this.set(in.next());
+        this.set(in.nextLine());
         return this.result;
     }
     //@todo: анализировать строку вида "команда имя_задачи"

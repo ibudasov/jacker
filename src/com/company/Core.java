@@ -51,28 +51,44 @@ public class Core {
             //     ("Что делаем?");
             Date openTime = new Date(); /** определяем время начала задачи */
             String startTime = formatTime(openTime); /** форматируем время начала задачи */
-            //res.setAndSend("Значение startTime: " + startTime); /** проверяем состояние переменной startTime*/
+            res.setAndSend("Значение startTime: " + startTime); /** проверяем состояние переменной startTime*/
             String inputTask = req.get("Что делаем?"); /** берём название задачи */
             res.setAndSend("Окей, начали: '" + inputTask + "'. Для завершения -- 'finish'");
             /** сохранение стартовавшей задачи */
             String[] task = new String[]{inputTask, startTime};
             st.add(task);
-            //System.out.println(Arrays.toString(st.add(task)));   проверка правильного выполнение двух строк выше
+            System.out.println(Arrays.toString(st.add(task)));   //проверка правильного выполнения двух строк выше
 
 
         }
 
         if (inputCommand.equalsIgnoreCase("finish")) {
             //@todo: получаем открытую задачу
+            String inputTask = req.get("какую задачу завершить?"); /** берём название задачи */
             int id = st.getIdByName(inputTask);
-            String[] taskFromFile = st.get(id);
-            res.setAndSend("Задача из файла: " + Arrays.toString(taskFromFile));
+            if (id != -1) {
+                res.setAndSend("Задача из файла: " + Arrays.toString(st.get(id)));
+            }
+            //if (st.get(id)!=-1)
+            else {
+                res.setAndSend("Нет такой задачи");
+            }
+
 
             /**
              * Определяем текущее время с помощью класса GregorianCalendar
              * и форматируем его исключительно для вывода в консоль
              */
             //openTime = new GregorianCalendar();  - openTime получаем из открытой задачи
+
+            /**    получение времени начала
+             int id = st.getIdByName(inputTask);
+             String[] taskFromFile = st.get(id);
+             taskFromFile[0] - имя
+             taskFromFile[1]
+             taskFromFile[2]
+             */
+
 
             /** Добавляем час к текущему времени */
             GregorianCalendar closeTime = new GregorianCalendar();
