@@ -74,7 +74,7 @@ public class Core {
 
                 String openTaskTime = taskFromFile[1];
                 SimpleDateFormat stringDate = new SimpleDateFormat();
-                Date openTime = openTaskTime.parse(taskFromFile[1]);
+                Date openTime = stringDate.parse(openTaskTime);
                 GregorianCalendar startTime = new GregorianCalendar();
                 startTime.setTime(openTime);
                 res.setAndSend("Время старта: " + formatTime(startTime));
