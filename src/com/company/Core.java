@@ -17,6 +17,7 @@ package com.company;
 import org.apache.xmlbeans.impl.xb.xsdschema.Public;
 
 import javax.swing.*;
+import java.text.ParseException;
 import java.text.SimpleDateFormat;
 import java.util.*;
 
@@ -27,7 +28,7 @@ public class Core {
     private Response res = new Response();
     private Storage st = new Storage();
 
-    public void Core() {
+    public void Core() throws ParseException {
 
         //TimeZone.setDefault(TimeZone.getTimeZone("GMT+0")); /** это нужно чтобы SimpleDateFormat не добавлял +2 часа нашей таймзоны */
 
@@ -67,7 +68,26 @@ public class Core {
             String inputTask = req.get("какую задачу завершить?"); /** берём название задачи */
             int id = st.getIdByName(inputTask);
             if (id != -1) {
-                res.setAndSend("Задача из файла: " + Arrays.toString(st.get(id)));
+                String[] taskFromFile = st.get(id);
+                res.setAndSend("Задача из файла: " + Arrays.toString(st.get(id)));  /** проверка */
+                res.setAndSend("Время начала: " + taskFromFile[1]);                 /** проверка */
+
+                String openTaskTime = taskFromFile[1];
+                SimpleDateFormat stringDate = new SimpleDateFormat();
+                Date openTime = openTaskTime.parse(taskFromFile[1]);
+                GregorianCalendar startTime = new GregorianCalendar();
+                startTime.setTime(openTime);
+                res.setAndSend("Время старта: " + formatTime(startTime));
+
+                Date closeTime = new Date(); /** определяем время окончания задачи */
+                GregorianCalendar finishTime = new GregorianCalendar();
+                finishTime.setTime(closeTime);
+                res.setAndSend("Время Финиша: " + formatTime(closeTime));
+
+                //String finishTime = formatTime(closeTime); /** форматируем время окончания задачи */
+                //res.setAndSend("Время работы: " + Interval(startTime, finishTime));
+                res.setAndSend("Время работы: " + startTime + finishTime);
+
             }
             //if (st.get(id)!=-1)
             else {
@@ -75,24 +95,9 @@ public class Core {
             }
 
 
-            /**
-             * Определяем текущее время с помощью класса GregorianCalendar
-             * и форматируем его исключительно для вывода в консоль
-             */
-            //openTime = new GregorianCalendar();  - openTime получаем из открытой задачи
-
-            /**    получение времени начала
-             int id = st.getIdByName(inputTask);
-             String[] taskFromFile = st.get(id);
-             taskFromFile[0] - имя
-             taskFromFile[1]
-             taskFromFile[2]
-             */
-
-
             /** Добавляем час к текущему времени */
-            GregorianCalendar closeTime = new GregorianCalendar();
-            closeTime.add(Calendar.HOUR_OF_DAY, 1);
+            //GregorianCalendar closeTime = new GregorianCalendar();
+            //closeTime.add(Calendar.HOUR_OF_DAY, 1);
 
             /** Возращаем посчитаный интервал времени */
             //res.setAndSend("Время работы: " + Interval(openTime, closeTime));
@@ -108,6 +113,7 @@ public class Core {
          * Присваиваем значение переменных GregorianCalendar
          * переменным класса Date форматируем так же с помощью SimpleDateFormat в методе formatTime
          */
+
         Date beginTime = startTime.getTime();
         Date endTime = finishTime.getTime();
 
