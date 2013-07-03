@@ -29,18 +29,13 @@ public class Core {
     private Storage st = new Storage();
 
     public void Core() throws ParseException {
-
-        //TimeZone.setDefault(TimeZone.getTimeZone("GMT+0")); /** это нужно чтобы SimpleDateFormat не добавлял +2 часа нашей таймзоны */
-
         //@todo: получать из хранилища незавершенную задачу, если возможно
         //@todo: показывать ее юзернейму, если возможно, типа: сейчас есть незавершенная задача
 
-        // приветствуем юзернейма
-        // получаем команду Start или Finish
         //String inputCommand = JOptionPane.showInputDialog  //получаем команду с помощью окна
         //        ("Start or Finish?");
         String inputCommand = req.get("Введите 'start' для начала новой задачи, или 'finish' для окончания текущей.");
-        res.setAndSend("Значение inputCommand: " + inputCommand); /** проверка состояния переменной inputCommand*/
+        //res.setAndSend("Значение inputCommand: " + inputCommand); /** проверка состояния переменной inputCommand*/
 
         //st.add(new String[] {"Название задачи", "2013-10-10 11:12:13", "2013-10-10 11:12:14"});
         //int id = st.getIdByName("Название задачи" );
@@ -52,7 +47,6 @@ public class Core {
             //     ("Что делаем?");
             Date openTime = new Date(); /** определяем время начала задачи */
             String startTime = formatTime(openTime); /** форматируем время начала задачи */
-            res.setAndSend("Значение startTime: " + startTime); /** проверяем состояние переменной startTime*/
             String inputTask = req.get("Что делаем?"); /** берём название задачи */
             res.setAndSend("Окей, начали: '" + inputTask + "'. Для завершения -- 'finish'");
             /** сохранение стартовавшей задачи */
@@ -60,62 +54,45 @@ public class Core {
             st.add(task);
             System.out.println(Arrays.toString(st.add(task)));   //проверка правильного выполнения двух строк выше
 
-
         }
 
         if (inputCommand.equalsIgnoreCase("finish")) {
-            //@todo: получаем открытую задачу
+            //@todo: выводить все незавершённые задачи
+
+
             String inputTask = req.get("какую задачу завершить?"); /** берём название задачи */
-            int id = st.getIdByName(inputTask);
+            int id = st.getIdByName(inputTask); /** берём ID задачи из файла по названию задачи */
             if (id != -1) {
                 String[] taskFromFile = st.get(id);
-                res.setAndSend("Задача из файла: " + Arrays.toString(st.get(id)));  /** проверка */
-                res.setAndSend("Время начала: " + taskFromFile[1]);                 /** проверка */
-
-                String openTaskTime = taskFromFile[1];
-                SimpleDateFormat stringDate = new SimpleDateFormat();
-                Date openTime = stringDate.parse(openTaskTime);
-                GregorianCalendar startTime = new GregorianCalendar();
-                startTime.setTime(openTime);
-                res.setAndSend("Время старта: " + formatTime(startTime));
+                String startTime = taskFromFile[1];
 
                 Date closeTime = new Date(); /** определяем время окончания задачи */
-                GregorianCalendar finishTime = new GregorianCalendar();
-                finishTime.setTime(closeTime);
-                res.setAndSend("Время Финиша: " + formatTime(closeTime));
+                String finishTime = formatTime(closeTime);
+                res.setAndSend("Время начала и время конца: " + startTime + " - " + finishTime);  // проверка
+                res.setAndSend("Время работы: " + Interval(startTime, finishTime));
 
-                //String finishTime = formatTime(closeTime); /** форматируем время окончания задачи */
-                //res.setAndSend("Время работы: " + Interval(startTime, finishTime));
-                res.setAndSend("Время работы: " + startTime + finishTime);
-
-            }
-            //if (st.get(id)!=-1)
-            else {
+            } else {
                 res.setAndSend("Нет такой задачи");
             }
 
-
-            /** Добавляем час к текущему времени */
-            //GregorianCalendar closeTime = new GregorianCalendar();
-            //closeTime.add(Calendar.HOUR_OF_DAY, 1);
-
-            /** Возращаем посчитаный интервал времени */
-            //res.setAndSend("Время работы: " + Interval(openTime, closeTime));
             return;
         }
 
         return;
     }
 
-    public String Interval(GregorianCalendar startTime, GregorianCalendar finishTime) {
+    public String Interval(String startTime, String finishTime) throws ParseException {
+        /** это нужно чтобы SimpleDateFormat не добавлял +2 часа нашей таймзоны */
+        TimeZone.setDefault(TimeZone.getTimeZone("GMT+0"));
 
         /**
-         * Присваиваем значение переменных GregorianCalendar
-         * переменным класса Date форматируем так же с помощью SimpleDateFormat в методе formatTime
+         * Присваиваем значение переменных String переменным класса Date
+         * форматируем так же с помощью SimpleDateFormat в методе formatTime
          */
-
-        Date beginTime = startTime.getTime();
-        Date endTime = finishTime.getTime();
+        SimpleDateFormat startTimeFormat = new SimpleDateFormat("HH:mm");
+        SimpleDateFormat finishTimeFormat = new SimpleDateFormat("HH:mm");
+        Date beginTime = startTimeFormat.parse(startTime);
+        Date endTime = finishTimeFormat.parse(finishTime);
 
         /** Вычисляем прошедшее время, отнимая beginTime от endTime */
         long interval = (endTime.getTime() - beginTime.getTime()); /** считается разница в милисекундах */
