@@ -40,12 +40,17 @@ public class Core {
         String[] input = req.getCommand();
 
         if (input[0].equalsIgnoreCase("start")) {
-            //@todo: сохранение стартовавшей задачи
             res.setAndSend("Окей, начали делать '" + input[1] + "'. Для завершения -- 'finish " + input[1] + "'");
+
+            // сохраняем задачу в хранилище
+            String task[] = new String[] {input[1], new GregorianCalendar().toString()};
+            st.add(task);
         }
 
         if (input[0].equalsIgnoreCase("finish")) {
-            //@todo: получаем открытую задачу
+
+            // получаем открытую задачу
+            String[] taskToFinish = st.get(st.getIdByName(input[1]));
 
             /**
              * Определяем текущее время с помощью класса GregorianCalendar
