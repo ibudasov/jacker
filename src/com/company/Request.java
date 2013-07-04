@@ -11,10 +11,12 @@
 package com.company;
 
 import java.util.Scanner;
+import java.util.StringTokenizer;
 
 public class Request {
 
     private String result;
+    private String[] command;
 
     /**
      * Конструктор объекта ответа.
@@ -30,8 +32,20 @@ public class Request {
      */
     public String get() {
         Scanner in = new Scanner(System.in);
-        this.set(in.next());
+        this.set(in.nextLine());
         return this.result;
+    }
+
+    /**
+     * Получение комманды, введенной пользователем.
+     * Команда парсится в массив строк, где первая запись -- сама команда,
+     * а остальные записи -- это параметры команды, в порядке ввода.
+     *
+     * @return String[]
+     */
+    public String[] getCommand() {
+        String requestString = this.get();
+        return this.command = requestString.split(" ");
     }
 
     /**

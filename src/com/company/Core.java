@@ -37,15 +37,14 @@ public class Core {
         //@todo: показывать ее юзернейму, если возможно, типа: сейчас есть незавершенная задача
 
         // получаем команду
-        String input = req.get();
+        String[] input = req.getCommand();
 
-        if (input.equalsIgnoreCase("start")) {
-            //@todo: получать не только команду старта, а еще и парсить как-то и имя
+        if (input[0].equalsIgnoreCase("start")) {
             //@todo: сохранение стартовавшей задачи
-            res.setAndSend("Окей, начали. Для завершения -- 'finish'");
+            res.setAndSend("Окей, начали делать '" + input[1] + "'. Для завершения -- 'finish " + input[1] + "'");
         }
 
-        if (input.equalsIgnoreCase("finish")) {
+        if (input[0].equalsIgnoreCase("finish")) {
             //@todo: получаем открытую задачу
 
             /**
@@ -54,11 +53,11 @@ public class Core {
              */
             GregorianCalendar openTime = new GregorianCalendar();
 
-            /** Добавляем час к текущему времени */
+            // добавляем час к текущему времени
             GregorianCalendar closeTime = new GregorianCalendar();
             closeTime.add(Calendar.HOUR_OF_DAY, 1);
 
-            /** Возращаем посчитаный интервал времени */
+            // возращаем посчитаный интервал времени
             res.setAndSend("Время работы: " + Interval(openTime, closeTime));
             return;
         }
