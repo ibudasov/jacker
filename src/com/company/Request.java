@@ -37,6 +37,8 @@ public class Request {
         this.set(in.nextLine());
         return this.result;
     }
+
+
     //@todo: анализировать строку вида "команда имя_задачи"
 
     /**
@@ -49,4 +51,18 @@ public class Request {
     private String set(String result) {
         return this.result = result;
     }
+
+    /**
+     * Получение комманды, введенной пользователем.
+     * Команда парсится в массив строк, где первая запись -- сама команда,
+     * а остальные записи -- это параметры команды, в порядке ввода.
+     *
+     * @return String[]
+     */
+    public String[] getCommand() {
+        String requestString = this.get(" ");
+        String[] command;
+        return command = requestString.split(" ");
+    }
+
 }

@@ -45,6 +45,8 @@ public class Storage {
         return task;
     }
 
+
+
     /**
      * Воpвращает задачу по айдишнику
      */
@@ -67,7 +69,7 @@ public class Storage {
 
             if (data[i] != null) {
 
-                if (data[i][0].equals(name)) {
+                if (data[i][0].equalsIgnoreCase(name)) {
                     return i;
                 }
             }

@@ -34,36 +34,53 @@ public class Core {
 
         //String inputCommand = JOptionPane.showInputDialog  //получаем команду с помощью окна
         //        ("Start or Finish?");
-        String inputCommand = req.get("Введите 'start' для начала новой задачи, или 'finish' для окончания текущей.");
+        //String inputCommand = req.get("Введите 'start' для начала новой задачи, или 'finish' для окончания текущей.");
         //res.setAndSend("Значение inputCommand: " + inputCommand); /** проверка состояния переменной inputCommand*/
 
-        //st.add(new String[] {"Название задачи", "2013-10-10 11:12:13", "2013-10-10 11:12:14"});
-        //int id = st.getIdByName("Название задачи" );
-        //String[] task = st.get(id);
+        String[] inputCommand = req.getCommand();
 
-        if (inputCommand.equalsIgnoreCase("start")) {
+        //if (input[0].equalsIgnoreCase("start")) {
+                    //res.setAndSend("Окей, начали делать '" + input[1] + "'. Для завершения -- 'finish " + input[1] + "'");
+
+                                // сохраняем задачу в хранилище
+                                        //String task[] = new String[] {input[1], new GregorianCalendar().toString()};
+                       // st.add(task);
+        //}
+
+        //if (input[0].equalsIgnoreCase("finish")) {
+
+                                        // получаем открытую задачу
+                                                //String[] taskToFinish = st.get(st.getIdByName(input[1]));
+
+
+          if (inputCommand[0].equalsIgnoreCase("start")){
+        //if (inputCommand.equalsIgnoreCase("start")) {
             //@todo: получать не только команду старта, а еще и парсить как-то и имя
             //String inputTask = JOptionPane.showInputDialog   //получаем имя задачи с помощью окна
             //     ("Что делаем?");
             Date openTime = new Date(); /** определяем время начала задачи */
             String startTime = formatTime(openTime); /** форматируем время начала задачи */
-            String inputTask = req.get("Что делаем?"); /** берём название задачи */
-            res.setAndSend("Окей, начали: '" + inputTask + "'. Для завершения -- 'finish'");
+
+            //String inputTask = req.get("Что делаем?"); /** берём название задачи */
+
+            //res.setAndSend("Окей, начали: '" + inputTask + "'. Для завершения -- 'finish'");
+            res.setAndSend("Окей, начали делать '" + inputCommand[1] + "'. Для завершения -- 'finish " + inputCommand[1] + "'");
             /** сохранение стартовавшей задачи */
-            String[] task = new String[]{inputTask, startTime};
+            String[] task = new String[]{inputCommand[1], startTime};
             st.add(task);
             System.out.println(Arrays.toString(st.add(task)));   //проверка правильного выполнения двух строк выше
 
         }
-
-        if (inputCommand.equalsIgnoreCase("finish")) {
+        if (inputCommand[0].equalsIgnoreCase("finish")){
+            //if (inputCommand.equalsIgnoreCase("finish")) {
             //@todo: выводить все незавершённые задачи
 
+            //String inputTask = req.get("какую задачу завершить?"); /** берём название задачи */
+            //int id = st.getIdByName(inputTask); /** берём ID задачи из файла по названию задачи */
+            //if (id != -1) {
 
-            String inputTask = req.get("какую задачу завершить?"); /** берём название задачи */
-            int id = st.getIdByName(inputTask); /** берём ID задачи из файла по названию задачи */
-            if (id != -1) {
-                String[] taskFromFile = st.get(id);
+                String[] taskFromFile = st.get(st.getIdByName(inputCommand[1]));
+                //String[] taskFromFile = st.get(id);
                 String startTime = taskFromFile[1];
 
                 Date closeTime = new Date(); /** определяем время окончания задачи */
@@ -71,15 +88,15 @@ public class Core {
                 res.setAndSend("Время начала и время конца: " + startTime + " - " + finishTime);  // проверка
                 res.setAndSend("Время работы: " + Interval(startTime, finishTime));
 
-            } else {
-                res.setAndSend("Нет такой задачи");
+            //} else {
+             //   res.setAndSend("Нет такой задачи");
             }
 
             return;
         }
 
-        return;
-    }
+        //return;
+    //}
 
     public String Interval(String startTime, String finishTime) throws ParseException {
         /** это нужно чтобы SimpleDateFormat не добавлял +2 часа нашей таймзоны */
