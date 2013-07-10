@@ -40,21 +40,24 @@ public class Core {
         String[] inputCommand = req.getCommand();
 
         //if (input[0].equalsIgnoreCase("start")) {
-                    //res.setAndSend("Окей, начали делать '" + input[1] + "'. Для завершения -- 'finish " + input[1] + "'");
+        //res.setAndSend("Окей, начали делать '" + input[1] + "'. Для завершения -- 'finish " + input[1] + "'");
 
-                                // сохраняем задачу в хранилище
-                                        //String task[] = new String[] {input[1], new GregorianCalendar().toString()};
-                       // st.add(task);
+        // сохраняем задачу в хранилище
+        //String task[] = new String[] {input[1], new GregorianCalendar().toString()};
+        // st.add(task);
         //}
 
         //if (input[0].equalsIgnoreCase("finish")) {
 
-                                        // получаем открытую задачу
-                                                //String[] taskToFinish = st.get(st.getIdByName(input[1]));
+        // получаем открытую задачу
+        //String[] taskToFinish = st.get(st.getIdByName(input[1]));
+        //@todo: анализировать строку на наличие только команды
 
+        if (inputCommand.length == 1) {
+        }
 
-          if (inputCommand[0].equalsIgnoreCase("start")){
-        //if (inputCommand.equalsIgnoreCase("start")) {
+        if (inputCommand[0].equalsIgnoreCase("start")) {
+            //if (inputCommand.equalsIgnoreCase("start")) {
             //@todo: получать не только команду старта, а еще и парсить как-то и имя
             //String inputTask = JOptionPane.showInputDialog   //получаем имя задачи с помощью окна
             //     ("Что делаем?");
@@ -64,14 +67,14 @@ public class Core {
             //String inputTask = req.get("Что делаем?"); /** берём название задачи */
 
             //res.setAndSend("Окей, начали: '" + inputTask + "'. Для завершения -- 'finish'");
-            res.setAndSend("Окей, начали делать '" + inputCommand[1] + "'. Для завершения -- 'finish " + inputCommand[1] + "'");
+            res.setAndSend("Окей, начали делать '" + inputCommand[1] + " в " + startTime + "'. Для завершения -- 'finish " + inputCommand[1] + "'");
             /** сохранение стартовавшей задачи */
             String[] task = new String[]{inputCommand[1], startTime};
             st.add(task);
             System.out.println(Arrays.toString(st.add(task)));   //проверка правильного выполнения двух строк выше
 
         }
-        if (inputCommand[0].equalsIgnoreCase("finish")){
+        if (inputCommand[0].equalsIgnoreCase("finish")) {
             //if (inputCommand.equalsIgnoreCase("finish")) {
             //@todo: выводить все незавершённые задачи
 
@@ -79,23 +82,20 @@ public class Core {
             //int id = st.getIdByName(inputTask); /** берём ID задачи из файла по названию задачи */
             //if (id != -1) {
 
-                String[] taskFromFile = st.get(st.getIdByName(inputCommand[1]));
-                //String[] taskFromFile = st.get(id);
-                String startTime = taskFromFile[1];
+            String[] taskFromFile = st.get(st.getIdByName(inputCommand[1]));
+            //String[] taskFromFile = st.get(id);
+            String startTime = taskFromFile[1];
 
-                Date closeTime = new Date(); /** определяем время окончания задачи */
-                String finishTime = formatTime(closeTime);
-                res.setAndSend("Время начала и время конца: " + startTime + " - " + finishTime);  // проверка
-                res.setAndSend("Время работы: " + Interval(startTime, finishTime));
+            Date closeTime = new Date(); /** определяем время окончания задачи */
+            String finishTime = formatTime(closeTime);
+            res.setAndSend("Время начала и конца: " + startTime + " - " + finishTime);  // проверка
+            res.setAndSend("Время работы: " + Interval(startTime, finishTime));
 
-            //} else {
-             //   res.setAndSend("Нет такой задачи");
-            }
+        } else res.setAndSend("Неверный ввод команды");
 
-            return;
-        }
+    }
 
-        //return;
+    //return;
     //}
 
     public String Interval(String startTime, String finishTime) throws ParseException {
