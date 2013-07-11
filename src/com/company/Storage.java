@@ -46,7 +46,6 @@ public class Storage {
     }
 
 
-
     /**
      * Воpвращает задачу по айдишнику
      */
@@ -56,6 +55,8 @@ public class Storage {
         System.out.println(data[0][0]);
         return data[id];
     }
+
+    //@todo: Cltkfnm метод getAndClose - для взятия задачи иприсваивания ей метки завершённости
 
     /**
      * Воpвращает id задачи по имени,

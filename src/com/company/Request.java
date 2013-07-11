@@ -59,16 +59,12 @@ public class Request {
      *
      * @return String[]
      */
-    public String[] getCommand() {
+    public String[] getCommand(String requestText) {
         //@todo: анализировать строку
 
 
-        String requestString = this.get(" ");
-        String[] command;
-        command = requestString.split(" ");
-
-        return command;
-
+        String requestString = this.get(requestText);
+        return requestString.split(" ");
     }
 
 }
