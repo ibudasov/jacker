@@ -45,6 +45,18 @@ public class Storage {
         return task;
     }
 
+    /**
+     * Изменение задачи
+     */
+    public void set(int id, String finishTime) {
+
+        String[][] data = getTasks();
+        data[id][2] = finishTime;
+        store(data);
+
+        return;
+    }
+
 
     /**
      * Воpвращает задачу по айдишнику
@@ -56,7 +68,7 @@ public class Storage {
         return data[id];
     }
 
-    //@todo: Cltkfnm метод getAndClose - для взятия задачи иприсваивания ей метки завершённости
+    //@todo: Сделать метод getAndClose - для взятия задачи иприсваивания ей метки завершённости
 
     /**
      * Воpвращает id задачи по имени,
@@ -151,14 +163,14 @@ public class Storage {
     }
 
 
-    public String taskToString(String[] task) {
+    //public String taskToString(String[] task) {
 
-        String result = new String();
+    //    String result = new String();
 
-        for (int i = 0; i < task.length; i++) {
-            result = task[i] + " ";
-        }
+    //    for (int i = 0; i < task.length; i++) {
+    //        result = task[i] + " ";
+    //    }
 
-        return result;
-    }
+    //    return result;
+    //}
 }

@@ -38,6 +38,12 @@ public class Request {
         return this.result;
     }
 
+    public String get() {
+        Scanner in = new Scanner(System.in);
+        this.set(in.nextLine());
+        return this.result;
+    }
+
 
     //@todo: анализировать строку вида "команда имя_задачи"
 
