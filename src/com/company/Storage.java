@@ -46,10 +46,9 @@ public class Storage {
     }
 
     /**
-     * Изменение задачи
+     * дописывает в задачу время окончания
      */
-    public void set(int id, String finishTime) {
-
+    public void setFT(int id, String finishTime) {
         String[][] data = getTasks();
         data[id][2] = finishTime;
         store(data);
@@ -64,11 +63,9 @@ public class Storage {
     public String[] get(Integer id) {
 
         String[][] data = getTasks();
-        System.out.println(data[0][0]);
+        //System.out.println(data[0][0]);
         return data[id];
     }
-
-    //@todo: Сделать метод getAndClose - для взятия задачи иприсваивания ей метки завершённости
 
     /**
      * Воpвращает id задачи по имени,

@@ -29,39 +29,20 @@ public class Core {
     private Storage st = new Storage();
 
     public void Core() throws ParseException {
-        //@todo: получать из хранилища незавершенную задачу, если возможно
-        //@todo: показывать ее юзернейму, если возможно, типа: сейчас есть незавершенная задача
 
         //String inputCommand = JOptionPane.showInputDialog  //получаем команду с помощью окна
         //        ("Start or Finish?");
-        //String inputCommand = req.get("Введите 'start' для начала новой задачи, или 'finish' для окончания текущей.");
-        //res.setAndSend("Значение inputCommand: " + inputCommand); /** проверка состояния переменной inputCommand*/
 
-        String[] inputCommand = req.getCommand("Для начала задачи -- start + название задачи; для окончания -- finish + название задачи.");
-
-        //if (input[0].equalsIgnoreCase("start")) {
-        //res.setAndSend("Окей, начали делать '" + input[1] + "'. Для завершения -- 'finish " + input[1] + "'");
-
-        // сохраняем задачу в хранилище
-        //String task[] = new String[] {input[1], new GregorianCalendar().toString()};
-        // st.add(task);
-        //}
-
-        //if (input[0].equalsIgnoreCase("finish")) {
-
-        // получаем открытую задачу
-        //String[] taskToFinish = st.get(st.getIdByName(input[1]));
+        String[] inputCommand = req.getCommand("Для начала задачи -- start + название задачи; для окончания -- finish + id задачи.");
 
         if (inputCommand[0].equalsIgnoreCase("start")) {
             if (inputCommand.length == 1) {
                 String inputTask = req.get("И всё-таки, что делаем?"); /** берём название задачи */
                 Date openTime = new Date(); /** определяем время начала задачи */
                 String startTime = formatTime(openTime); /** форматируем время начала задачи */
-                //res.setAndSend("Окей, начали делать '" + inputTask + "' в " + startTime + ". Для завершения -- 'finish " + inputTask + "'");
                 /** сохранение стартовавшей задачи */
                 String[] task = new String[]{inputTask, startTime, null};
                 st.add(task);
-                System.out.println(Arrays.toString(st.add(task)));   //проверка правильного выполнения двух строк выше
                 res.setAndSend("Окей, начали делать '" + inputTask + "' в " + startTime + ". Для завершения -- 'finish + id этой задачи: " + st.getIdByName(inputTask) + "'");
             } else {
                 //String inputTask = JOptionPane.showInputDialog   //получаем имя задачи с помощью окна
@@ -74,7 +55,6 @@ public class Core {
                 /** сохранение стартовавшей задачи */
                 String[] task = new String[]{inputTask, startTime, null};
                 st.add(task);
-                //System.out.println(Arrays.toString(st.add(task)));   //проверка правильного выполнения двух строк выше
                 res.setAndSend("Окей, начали делать '" + inputTask + "' в " + startTime + ". Для завершения -- 'finish + id этой задачи: " + st.getIdByName(inputTask) + "'");
 
             }
@@ -83,35 +63,52 @@ public class Core {
 
 
         if (inputCommand[0].equalsIgnoreCase("finish")) {
+            boolean askId = true;
             if (inputCommand.length == 1) {
-                //@TODO Сделать вывод всех задач
+                String[][] data = st.getTasks();
+                int j = 0;
+                for (int i = 0; i < data.length; i++) {                 //Перебираются все элементы двумерного массива с задачами
+                    if (data[i] != null) {                              //Выбираются только непустые элементы массива
+                        if (data[i].length > 2) {                       //Отсекаются задачи, в которых нет поля для времени окончания
+                            if (data[i][2] == null) {                   //Выбираются элементы, в которых не записано время окончания
+                                System.out.println("ID: " + i + ", '" + data[i][0] + "'. Время начала: " + data[i][1]);
+                                j++;
+                            }
+                        }
+                    } else {
+                        if (j == 0 & i == (data.length - 1)) {
+                            System.out.println("Ура! Нет незавершённых задач.");   //Когда нет незавершённых задач
+                            askId = false;
+                        }
 
-                int id = Integer.parseInt(req.get("Введите id задачи, которую хотите завершить: ")); /** берём id задачи */
-                String[] taskFromFile = st.get(id);
-                String startTime = taskFromFile[1];
-                res.setAndSend(id + startTime);
-                Date closeTime = new Date(); /** определяем время окончания задачи */
-                String finishTime = formatTime(closeTime);
-                res.setAndSend("Время начала и конца: " + startTime + " - " + finishTime);  // проверка
-                res.setAndSend("Время работы над задачей " + taskFromFile[1] + ": " + Interval(startTime, finishTime));
+                    }
+                }
+                if (askId) {
+                    int id = Integer.parseInt(req.get("Введите id задачи, которую хотите завершить: ")); /** берём id задачи */
+                    String[] taskFromFile = st.get(id);
+                    String startTime = taskFromFile[1];
+                    Date closeTime = new Date(); /** определяем время окончания задачи */
+                    String finishTime = formatTime(closeTime);
+                    st.setFT(id, finishTime);
+                    String[] closedTask = st.get(id);
+                    res.setAndSend("Время работы над задачей '" + closedTask[0] + "': " + Interval(startTime, finishTime));
+                }
 
             } else {
                 int id = Integer.parseInt(inputCommand[1]);
-                //@todo: выводить все незавершённые задачи
-
                 String[] taskFromFile = st.get(id);
                 String startTime = taskFromFile[1];
                 Date closeTime = new Date(); /** определяем время окончания задачи */
                 String finishTime = formatTime(closeTime);
-                st.set(id, finishTime);
+                st.setFT(id, finishTime);
                 String[] closedTask = st.get(id);
-                res.setAndSend("Время начала и конца: " + startTime + " - " + finishTime);  // проверка
-                res.setAndSend("Задача с временем окончания: " + Arrays.toString(closedTask));  // проверка
-                res.setAndSend("Время работы: " + Interval(startTime, finishTime));
+                //res.setAndSend("Время начала и конца: " + startTime + " - " + finishTime);  // проверка   8
+                res.setAndSend("Время работы задачи '" + closedTask[0] + "': " + Interval(startTime, finishTime));
             }
             return;
         }
         res.setAndSend("Неверный ввод команды");
+        //@todo: требовать верный ввод или EXIT для выхода
 
     }
 
